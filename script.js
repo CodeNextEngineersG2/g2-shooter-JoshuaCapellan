@@ -51,6 +51,9 @@ function setup(){
 	shipSpeed = 5;
 	shipX = width/2;
 	shipY = 360;
+
+	bulletDiameter = 20;
+	shipShooting = false;
 }
 
 function drawShip(){
@@ -66,9 +69,35 @@ function drawShip(){
 	}
 }
 
+function drawBullet (){
+	if (bulletY >= 0){
+	fill (0);
+	ellipse(bulletX,bulletY,bulletDiameter,bulletDiameter);
+	
+	bulletY -= 10;
+	}
+
+	else {
+		shipShooting = false;
+	}
+}
+
+function keyPressed(){
+  if (keyCode == 32 && shipShooting==false){
+  	bulletX = shipX
+  	bulletY = shipY
+
+  	shipShooting = true;
+  }
+}
+
 function draw(){
 	background(125);
 	drawShip();
+
+	if (shipShooting == true){
+		drawBullet();
+	}
 }
 
 
