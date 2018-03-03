@@ -43,10 +43,35 @@ function setup(){
 	canvasHeight=400;
 	canvas=createCanvas(canvasWidth,canvasHeight);
 	
-	background(0);
 	gameScreen = select('#game-screen');
 	canvas.parent("game-screen");
+
+	shipColor = 255;
+	shipDiameter = 80;
+	shipSpeed = 5;
+	shipX = width/2;
+	shipY = 360;
 }
+
+function drawShip(){
+	ellipse(shipX,shipY,shipDiameter,shipDiameter);
+	fill (0);
+
+	if (keyIsDown(LEFT_ARROW) && shipX > 40){
+		shipX -= shipSpeed
+	}
+
+	else if (keyIsDown(RIGHT_ARROW) && shipX < 460) {
+		shipX += shipSpeed
+	}
+}
+
+function draw(){
+	background(125);
+	drawShip();
+}
+
+
 
 /*
  * 
