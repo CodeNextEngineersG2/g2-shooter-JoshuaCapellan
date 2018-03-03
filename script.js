@@ -59,6 +59,29 @@ function setup(){
 	alienVelocity = 10;
 	alienX = 25;
 	alienY = 25;
+
+	alienBulletDiameter = 15;
+	alienShooting = false;
+}
+
+function draw(){
+	background(125);
+	
+	noStroke();
+
+	fill(0);
+	drawShip();
+	
+	fill (108, 196, 23);
+	drawAlien();
+
+	if (shipShooting == true){
+		drawBullet();
+	}
+
+	if (alienShooting == true){
+		drawAlienBullet();
+	}
 }
 
 function drawShip(){
@@ -98,7 +121,6 @@ function keyPressed(){
 
 function drawAlien(){
 	ellipse(alienX,alienY,alienDiameter,alienDiameter);
-
 	alienX += alienVelocity;
 
 	if (alienX >= 475){
@@ -108,21 +130,24 @@ function drawAlien(){
 	else if (alienX <= 25){
 		alienVelocity = 10;
 	}
+
+	if (random(4) < 1 && !alienShooting){
+		alienBulletY = alienY;
+		alienBulletX = alienX;
+
+		alienShooting = true;
+	}
 }
 
-function draw(){
-	background(125);
-	
-	noStroke();
+function drawAlienBullet (){
+	if (alienBulletY < 400){	
+		fill(108, 196, 23);
+		ellipse(alienBulletX,alienBulletY,alienBulletDiameter,alienBulletDiameter);
+		alienBulletY +=10;
+	}
 
-	fill(0);
-	drawShip();
-	
-	fill (108, 196, 23);
-	drawAlien();
-
-	if (shipShooting == true){
-		drawBullet();
+	else {
+		alienShooting = false;
 	}
 }
 
