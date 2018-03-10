@@ -82,6 +82,9 @@ function draw(){
 	if (alienShooting == true){
 		drawAlienBullet();
 	}
+
+	checkCollision (shipX, shipY, shipDiameter, alienBulletX, alienBulletY, alienBulletDiameter);
+
 }
 
 function drawShip(){
@@ -101,8 +104,23 @@ function drawBullet (){
 	if (bulletY >= 0){
 	fill (0);
 	ellipse(bulletX,bulletY,bulletDiameter,bulletDiameter);
-	
-	bulletY -= 13;
+
+	}
+
+	else {
+		shipShooting = false;  
+	}
+
+	var hitAlien = checkCollision (alienX, alienY, alienDiameter, bulletX, bulletY, bulletDiameter);
+
+	if (bulletY > 0 && !hitAlien) {
+		bulletY -= 13;
+	}
+
+	else if (hitAlien){
+		resetAlien();
+		alienVelocity++;
+		shipShooting = false;
 	}
 
 	else {
@@ -112,8 +130,8 @@ function drawBullet (){
 
 function keyPressed(){
   if (keyCode == 32 && shipShooting==false){
-  	bulletX = shipX
-  	bulletY = shipY
+  	bulletX = shipX;
+  	bulletY = shipY;
 
   	shipShooting = true;
   }
@@ -140,10 +158,16 @@ function drawAlien(){
 }
 
 function drawAlienBullet (){
-	if (alienBulletY < 400){	
+	var hitShip = checkCollision (shipX, shipY, shipDiameter, alienBulletX, alienBulletY, alienBulletDiameter);
+
+	if (alienBulletY < 400 && !hitShip){	
 		fill(108, 196, 23);
 		ellipse(alienBulletX,alienBulletY,alienBulletDiameter,alienBulletDiameter);
 		alienBulletY +=10;
+	}
+
+	else if (hitShip){
+		gameOver();
 	}
 
 	else {
@@ -151,6 +175,35 @@ function drawAlienBullet (){
 	}
 }
 
+function checkCollision(aX, aY, aD, bX, bY, bD){
+	var distance = dist(aX, aY, bX, bY);
+
+	if(distance <= aD/2 + bD/2){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function resetAlien(){
+	alienX = 25;
+	alienY = 25;
+}
+
+function gameOver(){
+	window.alert ("Game Over");
+	setup(); 
+}
+
+/*
+ * checkCollision(aX, aY, aD, bX, bY, bD)
+ * This function first calculates the distance between two circles based on
+ * their X and Y values. Based on the distance value, the function returns
+ * "true" if the circles are touching, and false otherwise.
+ * Circles are considered touching if
+ * (distance <= (circle1Diameter + circle2Diameter) / 2)
+ */
 
 
 /*
