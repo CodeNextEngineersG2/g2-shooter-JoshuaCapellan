@@ -46,45 +46,33 @@ function setup(){
 	gameScreen = select('#game-screen');
 	canvas.parent("game-screen");
 
-	shipColor = 255;
-	shipDiameter = 80;
-	shipSpeed = 5;
-	shipX = width/2;
-	shipY = 360;
+	scoreDisplay = select ("#score-display");
 
-	bulletDiameter = 20;
-	shipShooting = false;
-
-	alienDiameter = 50;
-	alienVelocity = 10;
-	alienX = 25;
-	alienY = 25;
-
-	alienBulletDiameter = 15;
-	alienShooting = false;
+	resetGame();
 }
 
 function draw(){
-	background(125);
+	if (gameRunning == true){
+		background(125);
 	
-	noStroke();
+		noStroke();
 
-	fill(0);
-	drawShip();
-	
-	fill (108, 196, 23);
-	drawAlien();
+		fill(0);
+		drawShip();
+		
+		fill (108, 196, 23);
+		drawAlien();
 
-	if (shipShooting == true){
+		if (shipShooting == true){
 		drawBullet();
+		}
+
+		if (alienShooting == true){
+			drawAlienBullet();
+		}
+
+		checkCollision (shipX, shipY, shipDiameter, alienBulletX, alienBulletY, alienBulletDiameter);
 	}
-
-	if (alienShooting == true){
-		drawAlienBullet();
-	}
-
-	checkCollision (shipX, shipY, shipDiameter, alienBulletX, alienBulletY, alienBulletDiameter);
-
 }
 
 function drawShip(){
@@ -92,11 +80,11 @@ function drawShip(){
 	fill (0);
 
 	if (keyIsDown(LEFT_ARROW) && shipX > 40){
-		shipX -= shipSpeed
+		shipX -= shipSpeed;
 	}
 
 	else if (keyIsDown(RIGHT_ARROW) && shipX < 460) {
-		shipX += shipSpeed
+		shipX += shipSpeed;
 	}
 }
 
@@ -121,15 +109,20 @@ function drawBullet (){
 		resetAlien();
 		alienVelocity++;
 		shipShooting = false;
+		
+		score ++;
+		scoreDisplay.html(score);
 	}
 
 	else {
 		shipShooting = false;
 	}
+
+	
 }
 
 function keyPressed(){
-  if (keyCode == 32 && shipShooting==false){
+  if (keyCode === 32 && shipShooting==false && gameRunning){
   	bulletX = shipX;
   	bulletY = shipY;
 
@@ -192,8 +185,10 @@ function resetAlien(){
 }
 
 function gameOver(){
+	gameRunning = false;
+	resetGame();
+
 	window.alert ("Game Over");
-	setup(); 
 }
 
 /*
@@ -227,6 +222,30 @@ function gameOver(){
  * This function "resets the game" by initializing ship, alien, and game
  * variables.
  */
+
+ function resetGame (){
+ 	score = 0;
+	scoreDisplay.html(score);
+
+	shipColor = 255;
+	shipDiameter = 80;
+	shipSpeed = 10;
+	shipX = width/2;
+	shipY = 360;
+
+	bulletDiameter = 20;
+	shipShooting = false;
+
+	alienDiameter = 50;
+	alienVelocity = 10;
+	alienX = 25;
+	alienY = 25;
+
+	alienBulletDiameter = 15;
+	alienShooting = false;
+
+	gameRunning = true;
+ }
 
 
 /*
