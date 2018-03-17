@@ -38,10 +38,15 @@ var alienBulletDiameter;
 var alienBulletX;
 var alienBulletY;
 
+var img;
+var background;
+
 function setup(){
 	canvasWidth=500;
 	canvasHeight=400;
 	canvas=createCanvas(canvasWidth,canvasHeight);
+
+	img = loadImage("Star.png");
 	
 	gameScreen = select('#game-screen');
 	canvas.parent("game-screen");
@@ -53,32 +58,40 @@ function setup(){
 
 function draw(){
 	if (gameRunning == true){
-		background(125);
+		background(25,25,112);
 	
 		noStroke();
 
-		fill(0);
+		fill(255);
 		drawShip();
 		
-		fill (108, 196, 23);
 		drawAlien();
 
+		fill(255,255,0);
 		if (shipShooting == true){
 		drawBullet();
 		}
 
+		fill (108, 196, 23);
 		if (alienShooting == true){
 			drawAlienBullet();
 		}
 
 		checkCollision (shipX, shipY, shipDiameter, alienBulletX, alienBulletY, alienBulletDiameter);
 	}
+
+
 }
 
 function drawShip(){
 	ellipse(shipX,shipY,shipDiameter,shipDiameter);
-	fill (0);
 
+	fill(25,25,112);
+	ellipse(shipX,shipY+10,shipDiameter-10, shipDiameter-5);
+
+	fill(255);
+	ellipse(shipX,shipY+10,shipDiameter-50,shipDiameter-30);
+	
 	if (keyIsDown(LEFT_ARROW) && shipX > 40){
 		shipX -= shipSpeed;
 	}
@@ -90,8 +103,9 @@ function drawShip(){
 
 function drawBullet (){
 	if (bulletY >= 0){
-	fill (0);
-	ellipse(bulletX,bulletY,bulletDiameter,bulletDiameter);
+
+	ellipse(bulletX,bulletY+5,bulletDiameter,bulletDiameter);
+	ellipse(bulletX, bulletY-10,bulletDiameter,bulletDiameter);
 
 	}
 
@@ -131,7 +145,14 @@ function keyPressed(){
 }
 
 function drawAlien(){
+
+	fill(100);
 	ellipse(alienX,alienY,alienDiameter,alienDiameter);
+
+	fill(0);
+	ellipse(alienX,alienY,alienDiameter-30,alienDiameter-30);
+
+
 	alienX += alienVelocity;
 
 	if (alienX >= 475){
@@ -233,7 +254,7 @@ function gameOver(){
 	shipX = width/2;
 	shipY = 360;
 
-	bulletDiameter = 20;
+	bulletDiameter = 10;
 	shipShooting = false;
 
 	alienDiameter = 50;
